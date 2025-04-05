@@ -78,6 +78,81 @@
       background-color: #dc3545;
       margin-top: 15px;
     }
+    /* التعديل على زر اختيار الملف */
+    #excelFile {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 10px;
+    }
+    #excelFile:hover {
+      background-color: #218838;
+    }
+    /* بنرات الاشتراكات */
+    .plans-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    .plan-banner {
+      background-color: #f0f0f0;
+      border-radius: 10px;
+      padding: 20px;
+      width: 30%;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .plan-banner:hover {
+      transform: scale(1.05);
+    }
+    .plan-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .plan-price {
+      font-size: 22px;
+      color: #28a745;
+    }
+    .plan-button {
+      margin-top: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .plan-button:hover {
+      background-color: #0056b3;
+    }
+    /* نافذة التعليمات */
+    .instructions {
+      display: none;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+    .instructions-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 60%;
+      text-align: center;
+    }
+    .instructions-content h2 {
+      margin-bottom: 20px;
+    }
+    .instructions-content p {
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -99,6 +174,7 @@
   <div class="container hidden" id="mainSection">
     <div class="user-info" id="loggedInUser"></div>
     <h2>محول Excel إلى VCF</h2>
+    <!-- تعديل زر اختيار الملف ليكون أخضر -->
     <input type="file" id="excelFile" accept=".xlsx, .xls" />
 
     <!-- جدول خيارات الأعمدة -->
@@ -127,8 +203,40 @@
     <br />
     <a id="downloadLink" style="display:none;">⬇️ تحميل ملف VCF</a>
 
+    <!-- إضافة بنرات الاشتراكات -->
+    <div class="plans-container">
+      <div class="plan-banner">
+        <div class="plan-title">خطة أسبوعية</div>
+        <div class="plan-price">50 ج.م</div>
+        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
+        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
+      </div>
+      <div class="plan-banner">
+        <div class="plan-title">خطة شهرية</div>
+        <div class="plan-price">100 ج.م</div>
+        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
+        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
+      </div>
+      <div class="plan-banner">
+        <div class="plan-title">خطة سنوية</div>
+        <div class="plan-price">500 ج.م</div>
+        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
+        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
+      </div>
+    </div>
+
     <!-- زر تسجيل الخروج -->
     <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+  </div>
+
+  <!-- نافذة تعليمات الدفع -->
+  <div class="instructions" id="instructions">
+    <div class="instructions-content">
+      <h2>تعليمات الدفع</h2>
+      <p>رقم التحويل: 01009311365</p>
+      <p>بعد التحويل، يرجى إرسال رسالة للدعم الفني ليتم تسليمك كلمة المرور الخاصة بك.</p>
+      <button onclick="closeInstructions()">إغلاق</button>
+    </div>
   </div>
 
   <!-- مكتبات -->
@@ -179,6 +287,18 @@
       document.getElementById("loginMessage").textContent = "";
     }
 
+    function showInstructions() {
+      document.getElementById("instructions").style.display = "flex";
+    }
+
+    function closeInstructions() {
+      document.getElementById("instructions").style.display = "none";
+    }
+
+    function contactSupport() {
+      window.location.href = "https://wa.me/01205557825";
+    }
+
     function getFormattedDate() {
       const now = new Date();
       return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}`;
@@ -211,7 +331,7 @@
           if (include("fieldPhone1") && row["رقم الهاتف"]) vcard += `TEL;TYPE=CELL:${row["رقم الهاتف"]}\n`;
           if (include("fieldPhone2") && row["رقم هاتف ثاني"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثاني"]}\n`;
           if (include("fieldPhone3") && row["رقم هاتف ثالث"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثالث"]}\n`;
-          if (include("fieldLandline") && row["رقم الهاتف الأرضي"]) vcard += `TEL;TYPE=LANDLINE:${row["رقم الهاتف الأرضي"]}\n`;
+          if (include("fieldLandline") && row["رقم الهاتف الأرضي"]) vcard += `TEL;TYPE=HOME:${row["رقم الهاتف الأرضي"]}\n`;
           if (include("fieldEmail") && row["بريد الكتروني"]) vcard += `EMAIL:${row["بريد الكتروني"]}\n`;
           if (include("fieldAddress") && row["عنوان"]) vcard += `ADR:${row["عنوان"]}\n`;
           if (include("fieldNotes") && row["ملاحظات"]) vcard += `NOTE:${row["ملاحظات"]}\n`;
