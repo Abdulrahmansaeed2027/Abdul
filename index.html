@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f9f9f9;
+      background-color: #f2f2f2;
       margin: 0;
       padding: 0;
       text-align: center;
@@ -28,15 +28,13 @@
       background: white;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     input, button, label {
       display: block;
       margin: 10px auto;
-      padding: 12px;
+      padding: 10px;
       font-size: 16px;
-      width: 90%;
-      max-width: 400px;
     }
     button {
       background-color: #007bff;
@@ -44,24 +42,22 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #0056b3;
-    }
-    .logout-btn {
-      background-color: #dc3545;
-      margin-top: 15px;
     }
     .hidden { display: none; }
     .field-options {
       margin-top: 20px;
       text-align: right;
     }
-    .field-options label {
-      display: block;
-      margin: 5px 0;
-      font-size: 15px;
+    .field-options table {
+      width: 100%;
+      text-align: right;
+      border-spacing: 10px;
+    }
+    .field-options td {
+      padding: 10px;
     }
     .select-toggle {
       margin: 10px 0;
@@ -72,20 +68,10 @@
       font-weight: bold;
       margin-bottom: 15px;
       color: #004080;
-      font-size: 18px;
     }
-    #activityLog {
-      margin-top: 20px;
-      background: #f1f1f1;
-      padding: 10px;
-      border-radius: 5px;
-      text-align: right;
-      max-height: 200px;
-      overflow-y: auto;
-      font-size: 14px;
-    }
-    #activityLog h4 {
-      margin-top: 0;
+    .logout-btn {
+      background-color: #dc3545;
+      margin-top: 15px;
     }
   </style>
 </head>
@@ -107,19 +93,28 @@
   <!-- الواجهة الرئيسية بعد الدخول -->
   <div class="container hidden" id="mainSection">
     <div class="user-info" id="loggedInUser"></div>
-    <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
     <h2>محول Excel إلى VCF</h2>
     <input type="file" id="excelFile" accept=".xlsx, .xls" />
 
+    <!-- جدول خيارات الأعمدة -->
     <div class="field-options">
       <strong>اختر الأعمدة التي تريد تضمينها:</strong>
       <span class="select-toggle" onclick="toggleAllFields()">تحديد الكل / إلغاء الكل</span>
-      <label><input type="checkbox" class="fieldCheck" id="fieldPhone1" checked> رقم الهاتف (أساسي)</label>
-      <label><input type="checkbox" class="fieldCheck" id="fieldPhone2"> رقم هاتف ثاني</label>
-      <label><input type="checkbox" class="fieldCheck" id="fieldPhone3"> رقم هاتف ثالث</label>
-      <label><input type="checkbox" class="fieldCheck" id="fieldEmail"> بريد إلكتروني</label>
-      <label><input type="checkbox" class="fieldCheck" id="fieldAddress"> عنوان</label>
-      <label><input type="checkbox" class="fieldCheck" id="fieldNotes"> ملاحظات</label>
+      <table>
+        <tr>
+          <td><label><input type="checkbox" class="fieldCheck" id="fieldPhone1" checked> رقم الهاتف (أساسي)</label></td>
+          <td><label><input type="checkbox" class="fieldCheck" id="fieldPhone2"> رقم هاتف ثاني</label></td>
+          <td><label><input type="checkbox" class="fieldCheck" id="fieldPhone3"> رقم هاتف ثالث</label></td>
+        </tr>
+        <tr>
+          <td><label><input type="checkbox" class="fieldCheck" id="fieldLandline"> رقم الهاتف الأرضي</label></td>
+          <td><label><input type="checkbox" class="fieldCheck" id="fieldEmail"> بريد إلكتروني</label></td>
+          <td><label><input type="checkbox" class="fieldCheck" id="fieldAddress"> عنوان</label></td>
+        </tr>
+        <tr>
+          <td colspan="3"><label><input type="checkbox" class="fieldCheck" id="fieldNotes"> ملاحظات</label></td>
+        </tr>
+      </table>
     </div>
 
     <button onclick="convertToVCF()">تحويل وتحميل</button>
@@ -127,10 +122,8 @@
     <br />
     <a id="downloadLink" style="display:none;">⬇️ تحميل ملف VCF</a>
 
-    <div id="activityLog">
-      <h4>سجل النشاطات</h4>
-      <ul id="logList"></ul>
-    </div>
+    <!-- زر تسجيل الخروج -->
+    <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
   </div>
 
   <!-- مكتبات -->
@@ -138,13 +131,6 @@
 
   <script>
     let currentUsername = "";
-
-    function logActivity(message) {
-      const time = new Date().toLocaleTimeString();
-      const li = document.createElement("li");
-      li.textContent = `[${time}] ${message}`;
-      document.getElementById("logList").prepend(li);
-    }
 
     function login() {
       const username = document.getElementById("username").value.trim();
@@ -165,7 +151,6 @@
               document.getElementById("loginSection").classList.add("hidden");
               document.getElementById("mainSection").classList.remove("hidden");
               document.getElementById("loggedInUser").textContent = `مرحباً، ${currentUsername}`;
-              logActivity(`تم تسجيل الدخول بواسطة ${currentUsername}`);
             } else {
               document.getElementById("loginMessage").textContent =
                 "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
@@ -181,7 +166,6 @@
     }
 
     function logout() {
-      logActivity(`تم تسجيل الخروج بواسطة ${currentUsername}`);
       currentUsername = "";
       document.getElementById("mainSection").classList.add("hidden");
       document.getElementById("loginSection").classList.remove("hidden");
@@ -222,6 +206,7 @@
           if (include("fieldPhone1") && row["رقم الهاتف"]) vcard += `TEL;TYPE=CELL:${row["رقم الهاتف"]}\n`;
           if (include("fieldPhone2") && row["رقم هاتف ثاني"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثاني"]}\n`;
           if (include("fieldPhone3") && row["رقم هاتف ثالث"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثالث"]}\n`;
+          if (include("fieldLandline") && row["رقم الهاتف الأرضي"]) vcard += `TEL;TYPE=LANDLINE:${row["رقم الهاتف الأرضي"]}\n`;
           if (include("fieldEmail") && row["بريد الكتروني"]) vcard += `EMAIL:${row["بريد الكتروني"]}\n`;
           if (include("fieldAddress") && row["عنوان"]) vcard += `ADR:${row["عنوان"]}\n`;
           if (include("fieldNotes") && row["ملاحظات"]) vcard += `NOTE:${row["ملاحظات"]}\n`;
@@ -237,20 +222,17 @@
         link.download = filename;
         link.style.display = "inline-block";
         link.textContent = `⬇️ تحميل ملف ${filename}`;
-
-        logActivity(`تم تحويل ملف Excel (${file.name}) إلى VCF باسم ${filename}`);
       };
       reader.readAsArrayBuffer(file);
     }
 
     function downloadTemplate() {
       const ws = XLSX.utils.aoa_to_sheet([
-        ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "بريد الكتروني", "عنوان", "ملاحظات"]
+        ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "رقم الهاتف الأرضي", "بريد الكتروني", "عنوان", "ملاحظات"]
       ]);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Template");
       XLSX.writeFile(wb, "excel_template.xlsx");
-      logActivity("تم تحميل نموذج Excel الفارغ.");
     }
   </script>
 </body>
