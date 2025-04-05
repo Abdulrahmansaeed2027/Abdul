@@ -114,10 +114,19 @@
           const user = users.find(u => u.name === username && u.password === password);
 
           if (user) {
-            document.getElementById("loginSection").classList.add("hidden");
-            document.getElementById("mainSection").classList.remove("hidden");
+            const today = new Date();
+            const startDate = new Date(user.subscription_start_date);
+            const endDate = new Date(user.subscription_end_date);
+
+            if (today >= startDate && today <= endDate) {
+              document.getElementById("loginSection").classList.add("hidden");
+              document.getElementById("mainSection").classList.remove("hidden");
+            } else {
+              document.getElementById("loginMessage").textContent =
+                "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
+            }
           } else {
-            document.getElementById("loginMessage").textContent = "يجب عليك أولاً الاشتراك";
+            document.getElementById("loginMessage").textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
           }
         })
         .catch(error => {
@@ -167,7 +176,7 @@
 
         const blob = new Blob([vcf], { type: 'text/vcard' });
         const url = URL.createObjectURL(blob);
-        const filename = `content_${getFormattedDate()}.vcf`;
+        const filename = `contacts_${getFormattedDate()}.vcf`;
         const link = document.getElementById("downloadLink");
         link.href = url;
         link.download = filename;
@@ -178,25 +187,12 @@
     }
 
     function downloadTemplate() {
-      const headers = ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "بريد الكتروني", "عنوان", "ملاحظات"];
-      const ws_data = [headers];
-      const ws = XLSX.utils.aoa_to_sheet(ws_data);
-      const phoneCols = [1, 2, 3];
-      phoneCols.forEach(i => {
-        const col = String.fromCharCode(65 + i);
-        const cell = col + "2";
-        ws[cell] = { t: "s", v: "", s: { numFmt: "@" } };
-      });
-      ws["!cols"] = headers.map(() => ({ wch: 20 }));
+      const ws = XLSX.utils.aoa_to_sheet([
+        ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "بريد الكتروني", "عنوان", "ملاحظات"]
+      ]);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "النموذج");
-      const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-      const blob = new Blob([wbout], { type: "application/octet-stream" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "نموذج-جهات-الاتصال.xlsx";
-      a.click();
+      XLSX.utils.book_append_sheet(wb, ws, "Template");
+      XLSX.writeFile(wb, "excel_template.xlsx");
     }
   </script>
 </body>
