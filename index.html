@@ -99,40 +99,44 @@
     <a id="downloadLink" style="display:none;">⬇️ تحميل ملف VCF</a>
   </div>
 
-  <!-- مكتبات -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
   <script>
-    // تسجيل الدخول
     function login() {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      fetch("users.json")
-        .then(res => res.json())
-        .then(users => {
-          const user = users.find(u => u.name === username && u.password === password);
+      const users = [
+        {
+          name: "abdo",
+          password: "123",
+          subscription_start_date: "2024-01-01",
+          subscription_end_date: "2025-01-01"
+        },
+        {
+          name: "test",
+          password: "1234",
+          subscription_start_date: "2023-01-01",
+          subscription_end_date: "2024-01-01"
+        }
+      ];
 
-          if (user) {
-            const today = new Date();
-            const startDate = new Date(user.subscription_start_date);
-            const endDate = new Date(user.subscription_end_date);
+      const user = users.find(u => u.name === username && u.password === password);
 
-            // التحقق من تاريخ الاشتراك
-            if (today >= startDate && today <= endDate) {
-              document.getElementById("loginSection").classList.add("hidden");
-              document.getElementById("mainSection").classList.remove("hidden");
-            } else {
-              document.getElementById("loginMessage").textContent = "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
-            }
-          } else {
-            document.getElementById("loginMessage").textContent = "يجب عليك أولاً الاشتراك";
-          }
-        })
-        .catch(error => {
-          console.error('Error loading users:', error);
-          document.getElementById("loginMessage").textContent = "حدث خطأ في تحميل بيانات المستخدمين.";
-        });
+      if (user) {
+        const today = new Date();
+        const startDate = new Date(user.subscription_start_date);
+        const endDate = new Date(user.subscription_end_date);
+
+        if (today >= startDate && today <= endDate) {
+          document.getElementById("loginSection").classList.add("hidden");
+          document.getElementById("mainSection").classList.remove("hidden");
+        } else {
+          document.getElementById("loginMessage").textContent =
+            "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
+        }
+      } else {
+        document.getElementById("loginMessage").textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
+      }
     }
 
     function getFormattedDate() {
@@ -162,15 +166,25 @@
         data.forEach(row => {
           const name = row["الاسم"] || "";
           if (!name) return;
-          let vcard = "BEGIN:VCARD\nVERSION:3.0\n";
-          vcard += `FN:${name}\n`;
-          if (include("fieldPhone1") && row["رقم الهاتف"]) vcard += `TEL;TYPE=CELL:${row["رقم الهاتف"]}\n`;
-          if (include("fieldPhone2") && row["رقم هاتف ثاني"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثاني"]}\n`;
-          if (include("fieldPhone3") && row["رقم هاتف ثالث"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثالث"]}\n`;
-          if (include("fieldEmail") && row["بريد الكتروني"]) vcard += `EMAIL:${row["بريد الكتروني"]}\n`;
-          if (include("fieldAddress") && row["عنوان"]) vcard += `ADR:${row["عنوان"]}\n`;
-          if (include("fieldNotes") && row["ملاحظات"]) vcard += `NOTE:${row["ملاحظات"]}\n`;
-          vcard += "END:VCARD\n";
+          let vcard = "BEGIN:VCARD
+VERSION:3.0
+";
+          vcard += `FN:${name}
+`;
+          if (include("fieldPhone1") && row["رقم الهاتف"]) vcard += `TEL;TYPE=CELL:${row["رقم الهاتف"]}
+`;
+          if (include("fieldPhone2") && row["رقم هاتف ثاني"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثاني"]}
+`;
+          if (include("fieldPhone3") && row["رقم هاتف ثالث"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثالث"]}
+`;
+          if (include("fieldEmail") && row["بريد الكتروني"]) vcard += `EMAIL:${row["بريد الكتروني"]}
+`;
+          if (include("fieldAddress") && row["عنوان"]) vcard += `ADR:${row["عنوان"]}
+`;
+          if (include("fieldNotes") && row["ملاحظات"]) vcard += `NOTE:${row["ملاحظات"]}
+`;
+          vcard += "END:VCARD
+";
           vcf += vcard;
         });
 
@@ -184,12 +198,29 @@
         link.textContent = `⬇️ تحميل ملف ${filename}`;
       };
       reader.readAsArrayBuffer(file);
-   
-      function downloadTemplate() {
-  const ws = XLSX.utils.aoa_to_sheet([
-    ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "بريد الكتروني", "عنوان", "ملاحظات"]
-  ]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Template");
-  XLSX.writeFile(wb, "excel_template.xlsx");
-}
+    }
+
+    function downloadTemplate() {
+      const headers = ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "بريد الكتروني", "عنوان", "ملاحظات"];
+      const ws_data = [headers];
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+      const phoneCols = [1, 2, 3];
+      phoneCols.forEach(i => {
+        const col = String.fromCharCode(65 + i);
+        const cell = col + "2";
+        ws[cell] = { t: "s", v: "", s: { numFmt: "@" } };
+      });
+      ws["!cols"] = headers.map(() => ({ wch: 20 }));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "النموذج");
+      const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const blob = new Blob([wbout], { type: "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "نموذج-جهات-الاتصال.xlsx";
+      a.click();
+    }
+  </script>
+</body>
+</html>
