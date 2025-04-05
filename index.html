@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f2f2f2;
+      background-color: #f9f9f9;
       margin: 0;
       padding: 0;
       text-align: center;
@@ -28,13 +28,15 @@
       background: white;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     input, button, label {
       display: block;
       margin: 10px auto;
-      padding: 10px;
+      padding: 12px;
       font-size: 16px;
+      width: 90%;
+      max-width: 400px;
     }
     button {
       background-color: #007bff;
@@ -42,9 +44,14 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     button:hover {
       background-color: #0056b3;
+    }
+    .logout-btn {
+      background-color: #dc3545;
+      margin-top: 15px;
     }
     .hidden { display: none; }
     .field-options {
@@ -54,11 +61,31 @@
     .field-options label {
       display: block;
       margin: 5px 0;
+      font-size: 15px;
     }
     .select-toggle {
       margin: 10px 0;
       cursor: pointer;
       color: #007bff;
+    }
+    .user-info {
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #004080;
+      font-size: 18px;
+    }
+    #activityLog {
+      margin-top: 20px;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: right;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+    #activityLog h4 {
+      margin-top: 0;
     }
   </style>
 </head>
@@ -79,6 +106,8 @@
 
   <!-- الواجهة الرئيسية بعد الدخول -->
   <div class="container hidden" id="mainSection">
+    <div class="user-info" id="loggedInUser"></div>
+    <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
     <h2>محول Excel إلى VCF</h2>
     <input type="file" id="excelFile" accept=".xlsx, .xls" />
 
@@ -97,13 +126,26 @@
     <button onclick="downloadTemplate()">تحميل نموذج Excel فارغ</button>
     <br />
     <a id="downloadLink" style="display:none;">⬇️ تحميل ملف VCF</a>
+
+    <div id="activityLog">
+      <h4>سجل النشاطات</h4>
+      <ul id="logList"></ul>
+    </div>
   </div>
 
   <!-- مكتبات -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
-    // تسجيل الدخول
+    let currentUsername = "";
+
+    function logActivity(message) {
+      const time = new Date().toLocaleTimeString();
+      const li = document.createElement("li");
+      li.textContent = `[${time}] ${message}`;
+      document.getElementById("logList").prepend(li);
+    }
+
     function login() {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -119,8 +161,11 @@
             const endDate = new Date(user.subscription_end_date);
 
             if (today >= startDate && today <= endDate) {
+              currentUsername = user.name;
               document.getElementById("loginSection").classList.add("hidden");
               document.getElementById("mainSection").classList.remove("hidden");
+              document.getElementById("loggedInUser").textContent = `مرحباً، ${currentUsername}`;
+              logActivity(`تم تسجيل الدخول بواسطة ${currentUsername}`);
             } else {
               document.getElementById("loginMessage").textContent =
                 "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
@@ -133,6 +178,16 @@
           console.error('Error loading users:', error);
           document.getElementById("loginMessage").textContent = "حدث خطأ في تحميل بيانات المستخدمين.";
         });
+    }
+
+    function logout() {
+      logActivity(`تم تسجيل الخروج بواسطة ${currentUsername}`);
+      currentUsername = "";
+      document.getElementById("mainSection").classList.add("hidden");
+      document.getElementById("loginSection").classList.remove("hidden");
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("loginMessage").textContent = "";
     }
 
     function getFormattedDate() {
@@ -182,6 +237,8 @@
         link.download = filename;
         link.style.display = "inline-block";
         link.textContent = `⬇️ تحميل ملف ${filename}`;
+
+        logActivity(`تم تحويل ملف Excel (${file.name}) إلى VCF باسم ${filename}`);
       };
       reader.readAsArrayBuffer(file);
     }
@@ -193,6 +250,7 @@
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Template");
       XLSX.writeFile(wb, "excel_template.xlsx");
+      logActivity("تم تحميل نموذج Excel الفارغ.");
     }
   </script>
 </body>
