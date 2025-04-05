@@ -161,13 +161,35 @@
     <img src="banar.png" alt="بانر الموقع">
   </header>
 
-  <!-- واجهة تسجيل الدخول -->
+  <!-- واجهة تسجيل الدخول مع بنرات الاشتراكات -->
   <div class="container" id="loginSection">
     <h2>تسجيل الدخول</h2>
     <input type="text" id="username" placeholder="اسم المستخدم" />
     <input type="password" id="password" placeholder="كلمة المرور" />
     <button onclick="login()">دخول</button>
     <p id="loginMessage" style="color:red;"></p>
+
+    <!-- إضافة بنرات الاشتراكات -->
+    <div class="plans-container">
+      <div class="plan-banner">
+        <div class="plan-title">خطة أسبوعية</div>
+        <div class="plan-price">50 ج.م</div>
+        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
+        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
+      </div>
+      <div class="plan-banner">
+        <div class="plan-title">خطة شهرية</div>
+        <div class="plan-price">100 ج.م</div>
+        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
+        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
+      </div>
+      <div class="plan-banner">
+        <div class="plan-title">خطة سنوية</div>
+        <div class="plan-price">500 ج.م</div>
+        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
+        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
+      </div>
+    </div>
   </div>
 
   <!-- الواجهة الرئيسية بعد الدخول -->
@@ -202,28 +224,6 @@
     <button onclick="downloadTemplate()">تحميل نموذج Excel فارغ</button>
     <br />
     <a id="downloadLink" style="display:none;">⬇️ تحميل ملف VCF</a>
-
-    <!-- إضافة بنرات الاشتراكات -->
-    <div class="plans-container">
-      <div class="plan-banner">
-        <div class="plan-title">خطة أسبوعية</div>
-        <div class="plan-price">50 ج.م</div>
-        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
-        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
-      </div>
-      <div class="plan-banner">
-        <div class="plan-title">خطة شهرية</div>
-        <div class="plan-price">100 ج.م</div>
-        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
-        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
-      </div>
-      <div class="plan-banner">
-        <div class="plan-title">خطة سنوية</div>
-        <div class="plan-price">500 ج.م</div>
-        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
-        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
-      </div>
-    </div>
 
     <!-- زر تسجيل الخروج -->
     <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
