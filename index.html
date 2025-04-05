@@ -108,13 +108,9 @@
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      fetch("username.xlsx")
-        .then(res => res.arrayBuffer())
-        .then(data => {
-          const workbook = XLSX.read(data, { type: "array" });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const users = XLSX.utils.sheet_to_json(sheet);
-
+      fetch("users.json")
+        .then(res => res.json())
+        .then(users => {
           const user = users.find(u => u.name === username && u.password === password);
 
           if (user) {
@@ -123,6 +119,10 @@
           } else {
             document.getElementById("loginMessage").textContent = "يجب عليك أولاً الاشتراك";
           }
+        })
+        .catch(error => {
+          console.error('Error loading users:', error);
+          document.getElementById("loginMessage").textContent = "حدث خطأ في تحميل بيانات المستخدمين.";
         });
     }
 
