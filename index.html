@@ -101,27 +101,14 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
-    function login() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+  function login() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-      const users = [
-        {
-          name: "abdo",
-          password: "123",
-          subscription_start_date: "2024-01-01",
-          subscription_end_date: "2025-01-01"
-        },
-        {
-          name: "test",
-          password: "1234",
-          subscription_start_date: "2023-01-01",
-          subscription_end_date: "2024-01-01"
-        }
-      ];
-
+  fetch("users.json")
+    .then(response => response.json())
+    .then(users => {
       const user = users.find(u => u.name === username && u.password === password);
-
       if (user) {
         const today = new Date();
         const startDate = new Date(user.subscription_start_date);
@@ -132,12 +119,18 @@
           document.getElementById("mainSection").classList.remove("hidden");
         } else {
           document.getElementById("loginMessage").textContent =
-            "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
+            "تم انتهاء فترة الاشتراك. يمكنك التجديد بالتواصل معنا على الرقم 01205557825.";
         }
       } else {
         document.getElementById("loginMessage").textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
       }
-    }
+    })
+    .catch(error => {
+      console.error("Error loading user data:", error);
+      document.getElementById("loginMessage").textContent = "حدث خطأ في تحميل بيانات المستخدمين.";
+    });
+}
+
 
     function getFormattedDate() {
       const now = new Date();
