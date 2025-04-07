@@ -1,364 +1,640 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>تسجيل دخول - محول جهات الاتصال</title>
+  <meta charset="UTF-8">
+  <title>YAFA</title>
+  <link rel="icon" href="لوجو-يافا-ايقون.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f2f2f2;
+      background-color: #f2e5bf;
+      font-family: 'Cairo', sans-serif;
       margin: 0;
       padding: 0;
-      text-align: center;
-      direction: rtl;
     }
-    header {
-      background-color: #004080;
+
+    .header {
+      background-color: #257180;
       color: white;
-      padding: 0;
-    }
-    header img {
-      width: 100%;
-      max-height: 180px;
-      object-fit: cover;
-    }
-    .container {
-      max-width: 700px;
-      margin: 30px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, button, label {
-      display: block;
-      margin: 10px auto;
       padding: 10px;
-      font-size: 16px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .hidden { display: none; }
-    .field-options {
-      margin-top: 20px;
-      text-align: right;
-    }
-    .field-options table {
-      width: 100%;
-      text-align: right;
-      border-spacing: 5px;
-      border-collapse: collapse;
-    }
-    .field-options td {
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-    }
-    .field-options label {
-      margin: 0;
-    }
-    .select-toggle {
-      margin: 10px 0;
-      cursor: pointer;
-      color: #007bff;
-    }
-    .user-info {
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #004080;
-    }
-    .logout-btn {
-      background-color: #dc3545;
-      margin-top: 15px;
-    }
-    /* التعديل على زر اختيار الملف */
-    #excelFile {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 10px;
-    }
-    #excelFile:hover {
-      background-color: #218838;
-    }
-    /* بنرات الاشتراكات */
-    .plans-container {
-      display: flex;
-      justify-content: space-around;
-      margin: 20px 0;
-    }
-    .plan-banner {
-      background-color: #f0f0f0;
-      border-radius: 10px;
-      padding: 20px;
-      width: 30%;
       text-align: center;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
     }
-    .plan-banner:hover {
-      transform: scale(1.05);
-    }
-    .plan-title {
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .plan-price {
-      font-size: 22px;
-      color: #28a745;
-    }
-    .plan-button {
-      margin-top: 10px;
-      background-color: #007bff;
+
+    .footer {
+      background-color: #fd8b51;
       color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .plan-button:hover {
-      background-color: #0056b3;
-    }
-    /* نافذة التعليمات */
-    .instructions {
-      display: none;
-      background-color: rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 10px;
       position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100%;
+      bottom: 0;
+    }
+
+    .developer-icon {
+      position: fixed;
+      bottom: 70px;
+      left: 20px;
+      background-color: #257180;
+      color: white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
       justify-content: center;
       align-items: center;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 1001;
     }
-    .instructions-content {
-      background-color: white;
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin: 10px;
+    }
+
+    .nav button {
+      background-color: #f1f1f1;
+      border: none;
       padding: 20px;
+      cursor: pointer;
+      font-size: 20px;
+      width: 32%;
+      margin-bottom: 10px;
+    }
+
+    .nav button:first-child {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .nav button:hover {
+      background-color: #ddd;
+    }
+
+    .hero {
+      background: linear-gradient(90deg, #257180, #4CAF50);
+      padding: 40px 20px;
+      color: white;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      flex: 2;
+      text-align: right;
+      padding-right: 20px;
+    }
+
+    .clients-slider {
+      flex: 1;
+      height: 180px;
+      position: relative;
+      overflow: hidden;
       border-radius: 10px;
-      width: 60%;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      min-width: 250px;
+    }
+
+    .clients-title {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1rem;
+      color: white;
+      background-color: rgba(37, 113, 128, 0.7);
+      padding: 5px 10px;
+      border-radius: 5px;
+      z-index: 10;
+    }
+
+    .client-card {
+      position: absolute;
+      top: 50;
+      right: 0;
+      width: 100%;
+      height: 115%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .client-card.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .client-image {
+      width: 100px;
+      height: 130px;
+      object-fit: cover;
+      margin-left: 15px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 5px;
+    }
+
+    .client-info {
+      text-align: right;
+      flex: 1;
+    }
+
+    .client-info h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .client-info p {
+      margin: 5px 0 0;
+      font-size: 0.8rem;
+      color: #f0f0f0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .updates {
+      padding: 20px;
       text-align: center;
     }
-    .instructions-content h2 {
-      margin-bottom: 20px;
+
+    .updates h2 {
+      color: #257180;
+      margin-bottom: 10px;
     }
-    .instructions-content p {
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .tab {
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .tab:hover {
+      transform: translateY(-5px);
+    }
+
+    .tab h3 {
+      color: #257180;
+    }
+
+    .tab p {
       margin: 10px 0;
+    }
+
+    .tab button {
+      background-color: #257180;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .tab button:hover {
+      transform: scale(1.1);
+      background-color: #4CAF50;
+    }
+
+    .download-link {
+      display: flex;
+      flex-direction: column;
+      background-color: #fff;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .download-link:hover {
+      transform: scale(1.03);
+      background-color: #f9f9f9;
+    }
+
+    .download-link p {
+      color: #257180;
+      margin: 5px 0;
+    }
+
+    .popup, .settings-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content, .settings-popup-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .popup-content h4, .settings-popup-content h4 {
+      color: #257180;
+      margin-bottom: 15px;
+    }
+
+    .popup-content p {
+      line-height: 1.8;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      background-color: #c0392b;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .settings-popup input {
+      padding: 10px;
+      margin-top: 20px;
+      width: 80%;
+      font-size: 18px;
+    }
+
+    .settings-popup button {
+      background-color: #257180;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav button {
+        width: 100%;
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero {
+        flex-direction: column;
+        padding: 40px 20px;
+      }
+
+      .hero-content {
+        padding-right: 0;
+        margin-bottom: 20px;
+      }
+
+      .clients-slider {
+        width: 100%;
+        height: 180px;
+      }
+
+      .clients-slider {
+        height: 150px;
+        min-width: 200px;
+      }
+      
+      .client-image {
+        width: 80px;
+        height: 80px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <img src="banar.png" alt="بانر الموقع">
-  </header>
+<div class="header">
+  <img src="logo-yafa.png" alt="Logo" width="470" height="70">
+</div>
 
-  <!-- واجهة تسجيل الدخول مع بنرات الاشتراكات -->
-  <div class="container" id="loginSection">
-    <h2>تسجيل الدخول</h2>
-    <input type="text" id="username" placeholder="اسم المستخدم" />
-    <input type="password" id="password" placeholder="كلمة المرور" />
-    <button onclick="login()">دخول</button>
-    <p id="loginMessage" style="color:red;"></p>
+<div class="nav">
+  <button onclick="showPasswordPrompt()">The Dominant خاص ببرنامج</button>
+  <button onclick="showMessage2()">خدمات الموقع</button>
+  <button onclick="showMessage3()">خاص ببرنامج إدارة الحضانات والأكاديميات</button>
+</div>
 
-    <!-- إضافة بنرات الاشتراكات -->
-    <div class="plans-container">
-      <div class="plan-banner">
-        <div class="plan-title">خطة أسبوعية</div>
-        <div class="plan-price">50 ج.م</div>
-        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
-        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
-      </div>
-      <div class="plan-banner">
-        <div class="plan-title">خطة شهرية</div>
-        <div class="plan-price">100 ج.م</div>
-        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
-        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
-      </div>
-      <div class="plan-banner">
-        <div class="plan-title">خطة سنوية</div>
-        <div class="plan-price">500 ج.م</div>
-        <button class="plan-button" onclick="showInstructions()">رقم الدفع للاشتراك</button>
-        <button class="plan-button" onclick="contactSupport()">تواصل مع الدعم الفني</button>
-      </div>
-    </div>
+<div class="developer-icon" onclick="showDeveloperPasswordPrompt()">⚙</div>
+
+<div class="hero" id="dynamic-hero">
+  <div class="hero-content">
+    <h1>أهلاً بك في Yafa</h1>
+    <p>نظام متكامل لإدارة الحضانات والدروس الخصوصية بكل سهولة واحترافية</p>
   </div>
-
-  <!-- الواجهة الرئيسية بعد الدخول -->
-  <div class="container hidden" id="mainSection">
-    <div class="user-info" id="loggedInUser"></div>
-    <h2>محول Excel إلى VCF</h2>
-    <!-- تعديل زر اختيار الملف ليكون أخضر -->
-    <input type="file" id="excelFile" accept=".xlsx, .xls" />
-
-    <!-- جدول خيارات الأعمدة -->
-    <div class="field-options">
-      <strong>اختر الأعمدة التي تريد تضمينها:</strong>
-      <span class="select-toggle" onclick="toggleAllFields()">تحديد الكل / إلغاء الكل</span>
-      <table>
-        <tr>
-          <td><label><input type="checkbox" class="fieldCheck" id="fieldPhone1" checked> رقم الهاتف (أساسي)</label></td>
-          <td><label><input type="checkbox" class="fieldCheck" id="fieldPhone2"> رقم هاتف ثاني</label></td>
-          <td><label><input type="checkbox" class="fieldCheck" id="fieldPhone3"> رقم هاتف ثالث</label></td>
-        </tr>
-        <tr>
-          <td><label><input type="checkbox" class="fieldCheck" id="fieldLandline"> رقم الهاتف الأرضي</label></td>
-          <td><label><input type="checkbox" class="fieldCheck" id="fieldEmail"> بريد إلكتروني</label></td>
-          <td><label><input type="checkbox" class="fieldCheck" id="fieldAddress"> عنوان</label></td>
-        </tr>
-        <tr>
-          <td colspan="3"><label><input type="checkbox" class="fieldCheck" id="fieldNotes"> ملاحظات</label></td>
-        </tr>
-      </table>
-    </div>
-
-    <button onclick="convertToVCF()">تحويل وتحميل</button>
-    <button onclick="downloadTemplate()">تحميل نموذج Excel فارغ</button>
-    <br />
-    <a id="downloadLink" style="display:none;">⬇️ تحميل ملف VCF</a>
-
-    <!-- زر تسجيل الخروج -->
-    <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
+  <div class="clients-slider" id="clients-slider">
+    <div class="clients-title">من عملائنا الكرام</div>
+    <!-- سيتم إضافة العملاء هنا عبر الجافاسكريبت -->
   </div>
+</div>
 
-  <!-- نافذة تعليمات الدفع -->
-  <div class="instructions" id="instructions">
-    <div class="instructions-content">
-      <h2>تعليمات الدفع</h2>
-      <p>رقم التحويل: 01009311365</p>
-      <p>بعد التحويل، يرجى إرسال رسالة للدعم الفني ليتم تسليمك كلمة المرور الخاصة بك.</p>
-      <button onclick="closeInstructions()">إغلاق</button>
-    </div>
+<div class="updates">
+  <h2>📝 التحديثات الجديدة</h2>
+  <p>إمكانية إرسال رسائل واتساب لأولياء الأمور بالحضور والغياب والدرجات</p>
+</div>
+
+<div class="tabs">
+  <div class="tab">
+    <h3>الخطة السنوية</h3>
+    <p>490 ج - برنامج إدارة الدروس الخصوصية</p>
+    <button onclick="openPopup()">كيفية الاشتراك</button>
   </div>
+  <div class="tab">
+    <h3>شراء كامل</h3>
+    <p>1500 ج - مفعل مدى الحياة</p>
+    <button onclick="openPopup()">كيفية الاشتراك</button>
+  </div>
+  <div class="tab">
+    <h3>شراء كامل + خدمات</h3>
+    <p>1600 ج - مدى الحياة + خدمات الموقع</p>
+    <button onclick="openPopup()">كيفية الاشتراك</button>
+  </div>
+</div>
 
-  <!-- مكتبات -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <h4>كيفية الدفع والاشتراك</h4>
+    <p>
+      يتم تحويل قيمة الاشتراك على فودافون كاش:<br />
+      <strong>01009311365</strong><br />
+      ثم التواصل مع الدعم الفني:<br />
+      <strong>01205557825</strong><br />
+      ليتم إنشاء باسورد خاص بك وتفعيل البرنامج.
+    </p>
+    <button class="close-btn" onclick="closePopup()">إغلاق</button>
+  </div>
+</div>
 
-  <script>
-    let currentUsername = "";
+<div class="settings-popup" id="developer-password-popup">
+  <div class="settings-popup-content">
+    <h4>أدخل كلمة مرور المطور</h4>
+    <input type="password" id="developer-password" placeholder="أدخل كلمة المرور">
+    <button onclick="checkDeveloperPassword()">دخول</button>
+    <button onclick="closeDeveloperPasswordPopup()">إغلاق</button>
+  </div>
+</div>
 
-    function login() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+<div class="settings-popup" id="settings-popup">
+  <div class="settings-popup-content">
+    <h4>تغيير كلمة مرور عرض روابط التحميل</h4>
+    <input type="password" id="new-password" placeholder="أدخل كلمة المرور الجديدة">
+    <button onclick="changePassword()">تغيير كلمة المرور</button>
+    <button onclick="closeSettingsPopup()">إغلاق</button>
+  </div>
+</div>
 
-      fetch("users.json")
-        .then(res => res.json())
-        .then(users => {
-          const user = users.find(u => u.name === username && u.password === password);
+<div class="footer">
+  <img src="whats.png" alt="Contact Icon" width="30px"> للتواصل: 01205557825
+</div>
 
-          if (user) {
-            const today = new Date();
-            const startDate = new Date(user.subscription_start_date);
-            const endDate = new Date(user.subscription_end_date);
+<script>
+  let currentPassword = "5050";
+  let developerPassword = "0100";
 
-            if (today >= startDate && today <= endDate) {
-              currentUsername = user.name;
-              document.getElementById("loginSection").classList.add("hidden");
-              document.getElementById("mainSection").classList.remove("hidden");
-              document.getElementById("loggedInUser").textContent = `مرحباً، ${currentUsername}`;
-            } else {
-              document.getElementById("loginMessage").textContent =
-                "تم انتهاء فترة الاشتراك ويمكنك تجديد الاشتراك من خلال التواصل معنا على الرقم 01205557825";
-            }
-          } else {
-            document.getElementById("loginMessage").textContent = "اسم المستخدم أو كلمة المرور غير صحيحة.";
-          }
-        })
-        .catch(error => {
-          console.error('Error loading users:', error);
-          document.getElementById("loginMessage").textContent = "حدث خطأ في تحميل بيانات المستخدمين.";
-        });
+  // بيانات العملاء (يمكن استبدالها ببيانات حقيقية)
+  const clients = [
+    {
+      name: "الأستاذ/ حمدي علي",
+      subject: "مدرس رياضيات",
+      image: "1.png"
+    },
+    {
+      name: "أستاذ/ خاطر محسن",
+      subject: "مدرس جغرافيا وجولوجيا",
+      image: "2.png"
+    },
+    {
+      name: "الأستاذ/ هاني محمد الشناوي",
+      subject: "مدرس لغة إنجليزية",
+      image: "3.png"
+    },
+    {
+      name: "الأستاذ/ سيد أبو صالحة",
+      subject: "مدرس فيزياء",
+      image: "4.png"
+    },
+    {
+      name: "الأستاذ/ عمرو عبدالغني",
+      subject: "مدرس دراسات",
+      image: "5.png"
+    },
+    {
+      name: "الأستاذ/ حافظ جلال",
+      subject: "مدرس لغة عربية",
+      image: "6.png"
+    },
+    {
+      name: "الأستاذ/ محمد رزق",
+      subject: "مدرس لغة عربية",
+      image: "7.png"
+    },
+    {
+      name: "الأستاذ/ كريم طارق البكري",
+      subject: "مدرس لغة إنجليزية",
+      image: "8.png"
+    },
+    {
+      name: "الأستاذ/ بهاء السيد",
+      subject: "مدرس فزياء",
+      image: "9.png"
+    },
+    {
+      name: "الأستاذ/ محمد ضياء",
+      subject: "مدرس علوم",
+      image: "10.png"
     }
+  ];
 
-    function logout() {
-      currentUsername = "";
-      document.getElementById("mainSection").classList.add("hidden");
-      document.getElementById("loginSection").classList.remove("hidden");
-      document.getElementById("username").value = "";
-      document.getElementById("password").value = "";
-      document.getElementById("loginMessage").textContent = "";
+  // عرض العملاء بشكل متحرك
+  function initClientsSlider() {
+    const slider = document.getElementById("clients-slider");
+    let currentIndex = 0;
+
+    // إنشاء بطاقات العملاء
+    clients.forEach((client, index) => {
+      const clientCard = document.createElement("div");
+      clientCard.className = "client-card";
+      clientCard.innerHTML = `
+        <img src="${client.image}" alt="${client.name}" class="client-image">
+        <div class="client-info">
+          <h3>${client.name}</h3>
+          <p>${client.subject}</p>
+        </div>
+      `;
+      slider.appendChild(clientCard);
+    });
+
+    const clientCards = document.querySelectorAll(".client-card");
+    
+    // عرض أول عميل
+    if (clientCards.length > 0) {
+      clientCards[0].classList.add("active");
     }
+    // تغيير العميل كل 4 ثوانٍ
+    setInterval(() => {
+      if (clientCards.length > 0) {
+        clientCards[currentIndex].classList.remove("active");
+        currentIndex = (currentIndex + 1) % clients.length;
+        
+        // إضافة تأخير قبل إظهار العميل التالي
+        setTimeout(() => {
+          clientCards[currentIndex].classList.add("active");
+        }, 300);
+      }
+    }, 4000);
+  }
 
-    function showInstructions() {
-      document.getElementById("instructions").style.display = "flex";
+  // تهيئة السلايدر عند تحميل الصفحة
+  window.onload = function() {
+    initClientsSlider();
+  };
+
+  function showPasswordPrompt() {
+    const heroSection = document.getElementById("dynamic-hero");
+    heroSection.innerHTML = `
+      <div class="hero-content">
+        <h1>كلمة المرور الخاصة بـ "The Dominant"</h1>
+        <input type="password" id="password" placeholder="أدخل كلمة المرور" style="padding: 10px; margin-top: 20px;">
+        <button onclick="checkPassword()" style="padding: 10px 20px; margin-top: 10px; background-color: #257180; color: white;">إظهار روابط التحميل</button>
+        <p id="error-message" style="color: red; display: none; margin-top: 10px;">كلمة المرور خاطئة. تواصل مع الدعم الفني 01205557825 للاشتراك والحصول على كلمة مرور.</p>
+      </div>
+      <div class="clients-slider" id="clients-slider">
+        <div class="clients-title">من عملائنا الكرام</div>
+      </div>
+    `;
+    initClientsSlider();
+  }
+  function checkPassword() {
+    const passwordInput = document.getElementById("password").value;
+    const errorMessage = document.getElementById("error-message");
+
+    if (passwordInput === currentPassword) {
+      document.getElementById("dynamic-hero").innerHTML = `
+        <div class="hero-content">
+          <h1>روابط التحميل لـ برنامج "The Dominant" الخاص بتنظيم بيانات الطلاب</h1>
+          <div class="download-link" onclick="window.open('https://drive.google.com/file/d/1B3Ue_1KFlGPhnsP-wmYZ347LePDglGsR/view?usp=sharing')">
+            <p>تحميل البرامج</p>
+            <p>قم بتحميل الثلاث برامج من هنا في رابط واحد وستجد معه صورة بها كيفية التسطيب</p>
+          </div>
+          <div class="download-link" onclick="window.open('https://drive.google.com/file/d/1C183TaPV4A1IocbKpfgHR7bWljqrPg_E/view?usp=sharing')">
+            <p>شرح البرنامج</p>
+            <p>فيديو شرح برنامج الطلاب بكل تفاصيله</p>
+          </div>
+          <div class="download-link" onclick="window.open('https://youtu.be/7k_pY1Yx5Dg')">
+            <p>فيديو شرح واتساب سيندر</p>
+            <p>شرح برنامج واتساب سيندر التسطيب والإرسال</p>
+          </div>
+        </div>
+        <div class="clients-slider" id="clients-slider"></div>
+      `;
+      initClientsSlider();
+    } else {
+      errorMessage.style.display = "block";
     }
+  }
 
-    function closeInstructions() {
-      document.getElementById("instructions").style.display = "none";
+  function showMessage2() {
+    document.getElementById('dynamic-hero').innerHTML = `
+      <div class="hero-content">
+        <h1>خدمات الموقع تحت التطوير</h1>
+        <button onclick="window.location.href='index2.html'" style="margin-top: 20px; padding: 10px 20px; background-color: #257180; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer;">اذهب إلى الصفحة</button>
+      </div>
+      <div class="clients-slider" id="clients-slider"></div>
+    `;
+    initClientsSlider();
+  }
+
+  function showMessage3() {
+    document.getElementById('dynamic-hero').innerHTML = `
+      <div class="hero-content">
+        <h1>إدارة الحضانات قيد التطوير</h1>
+        <p>تابعنا للحصول على آخر التحديثات.</p>
+      </div>
+      <div class="clients-slider" id="clients-slider"></div>
+    `;
+    initClientsSlider();
+  }
+
+  function openPopup() {
+    document.getElementById("popup").style.display = "flex";
+  }
+
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
+
+  function showDeveloperPasswordPrompt() {
+    document.getElementById("developer-password-popup").style.display = "flex";
+  }
+
+  function closeDeveloperPasswordPopup() {
+    document.getElementById("developer-password-popup").style.display = "none";
+  }
+
+  function checkDeveloperPassword() {
+    const developerPasswordInput = document.getElementById("developer-password").value;
+    if (developerPasswordInput === developerPassword) {
+      closeDeveloperPasswordPopup();
+      showSettingsPopup();
+    } else {
+      alert("كلمة مرور المطور خاطئة.");
     }
+  }
 
-    function contactSupport() {
-      window.location.href = "https://wa.me/01205557825";
+  function showSettingsPopup() {
+    document.getElementById("settings-popup").style.display = "flex";
+  }
+
+  function closeSettingsPopup() {
+    document.getElementById("settings-popup").style.display = "none";
+  }
+
+  function changePassword() {
+    const newPassword = document.getElementById("new-password").value;
+    if (newPassword) {
+      currentPassword = newPassword;
+      alert("تم تغيير كلمة المرور بنجاح.");
+      closeSettingsPopup();
+    } else {
+      alert("من فضلك أدخل كلمة مرور جديدة.");
     }
+  }
+</script>
 
-    function getFormattedDate() {
-      const now = new Date();
-      return `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}`;
-    }
-
-    function toggleAllFields() {
-      const checks = document.querySelectorAll('.fieldCheck');
-      const allChecked = Array.from(checks).every(cb => cb.checked);
-      checks.forEach(cb => cb.checked = !allChecked);
-    }
-
-    function convertToVCF() {
-      const file = document.getElementById('excelFile').files[0];
-      if (!file) return alert("اختر ملف Excel أولاً.");
-
-      const include = id => document.getElementById(id).checked;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const workbook = XLSX.read(e.target.result, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(sheet);
-
-        let vcf = "";
-        data.forEach(row => {
-          const name = row["الاسم"] || "";
-          if (!name) return;
-          let vcard = "BEGIN:VCARD\nVERSION:3.0\n";
-          vcard += `FN:${name}\n`;
-          if (include("fieldPhone1") && row["رقم الهاتف"]) vcard += `TEL;TYPE=CELL:${row["رقم الهاتف"]}\n`;
-          if (include("fieldPhone2") && row["رقم هاتف ثاني"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثاني"]}\n`;
-          if (include("fieldPhone3") && row["رقم هاتف ثالث"]) vcard += `TEL;TYPE=CELL:${row["رقم هاتف ثالث"]}\n`;
-          if (include("fieldLandline") && row["رقم الهاتف الأرضي"]) vcard += `TEL;TYPE=HOME:${row["رقم الهاتف الأرضي"]}\n`;
-          if (include("fieldEmail") && row["بريد الكتروني"]) vcard += `EMAIL:${row["بريد الكتروني"]}\n`;
-          if (include("fieldAddress") && row["عنوان"]) vcard += `ADR:${row["عنوان"]}\n`;
-          if (include("fieldNotes") && row["ملاحظات"]) vcard += `NOTE:${row["ملاحظات"]}\n`;
-          vcard += "END:VCARD\n";
-          vcf += vcard;
-        });
-
-        const blob = new Blob([vcf], { type: 'text/vcard' });
-        const url = URL.createObjectURL(blob);
-        const filename = `contacts_${getFormattedDate()}.vcf`;
-        const link = document.getElementById("downloadLink");
-        link.href = url;
-        link.download = filename;
-        link.style.display = "inline-block";
-        link.textContent = `⬇️ تحميل ملف ${filename}`;
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    function downloadTemplate() {
-      const ws = XLSX.utils.aoa_to_sheet([
-        ["الاسم", "رقم الهاتف", "رقم هاتف ثاني", "رقم هاتف ثالث", "رقم الهاتف الأرضي", "بريد الكتروني", "عنوان", "ملاحظات"]
-      ]);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Template");
-      XLSX.writeFile(wb, "excel_template.xlsx");
-    }
-  </script>
 </body>
 </html>
