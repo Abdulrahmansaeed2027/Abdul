@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>بوابة الطلاب</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f6fa;
+    --surface: #ffffff;
+    --border: #e4e6ef;
+    --text: #1a1d2e;
+    --text-muted: #7b7f9e;
+    --accent: #4361ee;
+    --accent-light: #eef0fd;
+    --success: #2ec4b6;
+    --success-light: #eafaf9;
+    --danger: #e63946;
+    --danger-light: #fdecea;
+    --warning: #f4a261;
+    --warning-light: #fef4ec;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(67,97,238,.08);
+  }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  /* ── Login ── */
+  .login-wrap {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .brand {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .brand-icon {
+    width: 56px; height: 56px;
+    background: var(--accent);
+    border-radius: 16px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: .75rem;
+  }
+
+  .brand-icon svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .brand h1 { font-size: 22px; font-weight: 700; color: var(--text); }
+  .brand p  { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+
+  .field { margin-bottom: 1.25rem; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+
+  .input-wrap { position: relative; }
+  .input-wrap svg {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    right: 12px; width: 18px; height: 18px;
+    stroke: var(--text-muted); fill: none; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  input[type=text], input[type=password], input[type=tel] {
+    width: 100%; padding: 11px 40px 11px 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: 'Cairo', sans-serif; font-size: 15px; color: var(--text);
+    background: var(--bg); outline: none; transition: border-color .2s;
+  }
+  input:focus { border-color: var(--accent); background: #fff; }
+
+  .btn-primary {
+    width: 100%; padding: 12px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 8px;
+    font-family: 'Cairo', sans-serif; font-size: 16px; font-weight: 700;
+    cursor: pointer; transition: opacity .2s, transform .1s;
+    margin-top: .5rem;
+  }
+  .btn-primary:hover { opacity: .9; }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+
+  .error-msg {
+    background: var(--danger-light); color: var(--danger);
+    border: 1px solid #f5c6c9; border-radius: 8px;
+    padding: 10px 14px; font-size: 13px; font-weight: 600;
+    margin-top: 1rem; display: none;
+  }
+
+  /* ── Dashboard ── */
+  .dashboard { width: 100%; max-width: 680px; display: none; }
+
+  .dash-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .student-info h2 { font-size: 20px; font-weight: 700; }
+  .student-info p  { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  .btn-logout {
+    padding: 8px 16px; background: transparent;
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--text-muted); cursor: pointer; transition: all .2s;
+  }
+  .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.25rem;
+    text-align: center; box-shadow: var(--shadow);
+  }
+  .stat-val { font-size: 28px; font-weight: 700; }
+  .stat-lbl { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-weight: 600; }
+
+  .stat-card.present .stat-val { color: var(--success); }
+  .stat-card.absent  .stat-val { color: var(--danger); }
+  .stat-card.grade   .stat-val { color: var(--accent); }
+
+  .tabs {
+    display: flex; gap: 8px; margin-bottom: 1rem;
+  }
+  .tab {
+    padding: 8px 20px; border-radius: 8px;
+    font-family: 'Cairo', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-muted);
+    transition: all .2s;
+  }
+  .tab.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+  .table-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    padding: 12px 16px; font-size: 12px; font-weight: 700;
+    color: var(--text-muted); text-align: right;
+    background: var(--bg); border-bottom: 1px solid var(--border);
+  }
+  tbody td {
+    padding: 12px 16px; font-size: 14px; font-weight: 500;
+    border-bottom: 1px solid var(--border); text-align: right;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--bg); }
+
+  .badge {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 99px; font-size: 12px; font-weight: 700;
+  }
+  .badge-present { background: var(--success-light); color: var(--success); }
+  .badge-absent  { background: var(--danger-light);  color: var(--danger); }
+
+  .empty { padding: 2rem; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+  .loading {
+    text-align: center; color: var(--text-muted);
+    font-size: 14px; padding: 1rem 0;
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    .stats-grid { grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .stat-card { padding: .9rem .5rem; }
+    .stat-val { font-size: 22px; }
+    .card { padding: 1.5rem 1.25rem; }
+    .dash-header { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div class="login-wrap" id="login-section">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <h1>بوابة الطلاب</h1>
+    <p>سجّل دخولك لمتابعة نتائجك وحضورك</p>
+  </div>
+
+  <div class="card">
+    <div class="field">
+      <label>رقم الهاتف</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .99h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7a2 2 0 011.72 2.02z"/></svg>
+        <input type="tel" id="phone" placeholder="01012345678" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>الباسورد</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="password" placeholder="••••••••" />
+      </div>
+    </div>
+
+    <button class="btn-primary" id="login-btn" onclick="doLogin()">دخول</button>
+    <div class="error-msg" id="error-msg">رقم الهاتف أو الباسورد غلط، حاول تاني.</div>
+    <div class="loading" id="loading-msg">جاري التحقق...</div>
+  </div>
+</div>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="dashboard" id="dashboard-section">
+  <div class="dash-header">
+    <div class="student-info">
+      <h2 id="dash-name">—</h2>
+      <p id="dash-phone">—</p>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">تسجيل الخروج</button>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card present">
+      <div class="stat-val" id="stat-present">0</div>
+      <div class="stat-lbl">أيام الحضور</div>
+    </div>
+    <div class="stat-card absent">
+      <div class="stat-val" id="stat-absent">0</div>
+      <div class="stat-lbl">أيام الغياب</div>
+    </div>
+    <div class="stat-card grade">
+      <div class="stat-val" id="stat-avg">—</div>
+      <div class="stat-lbl">متوسط الدرجات</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-attend" onclick="switchTab('attend')">الحضور</button>
+    <button class="tab"        id="tab-grades" onclick="switchTab('grades')">الدرجات</button>
+  </div>
+
+  <div class="table-card">
+    <!-- Attendance table -->
+    <div id="panel-attend">
+      <table>
+        <thead><tr><th>اليوم</th><th>الشهر</th><th>الحالة</th></tr></thead>
+        <tbody id="tbody-attend"></tbody>
+      </table>
+    </div>
+    <!-- Grades table -->
+    <div id="panel-grades" style="display:none">
+      <table>
+        <thead><tr><th>اليوم</th><th>الشهر</th><th>الدرجة</th></tr></thead>
+        <tbody id="tbody-grades"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTN7JTFP57zeI1T5GPPsMGRhLkKxFsrM46fcqXlmhbLdCx-sfZf_D7g7Qc3u_jnePBhJQBZJZYFRgaU/pub?gid=0&single=true&output=csv";
+
+let studentRows = [];
+
+function parseCSV(text) {
+  const lines = text.trim().split("\n");
+  const headers = lines[0].split(",").map(h => h.trim().replace(/"/g, ""));
+  return lines.slice(1).map(line => {
+    const vals = line.match(/(".*?"|[^,]+|(?<=,)(?=,)|^(?=,)|(?<=,)$)/g) || [];
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = (vals[i] || "").trim().replace(/^"|"$/g, "");
+    });
+    return obj;
+  });
+}
+
+async function doLogin() {
+  const phone    = document.getElementById("phone").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errEl    = document.getElementById("error-msg");
+  const loadEl   = document.getElementById("loading-msg");
+  const btn      = document.getElementById("login-btn");
+
+  errEl.style.display  = "none";
+  loadEl.style.display = "block";
+  btn.disabled = true;
+
+  try {
+    const res  = await fetch(SHEET_URL);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    const matched = rows.filter(r =>
+      r["رقم الهاتف"] === phone && r["الباسورد"] === password
+    );
+
+    if (matched.length === 0) {
+      errEl.style.display = "block";
+    } else {
+      studentRows = matched;
+      showDashboard(matched, phone);
+    }
+  } catch (e) {
+    errEl.textContent = "حصل خطأ في الاتصال، حاول تاني.";
+    errEl.style.display = "block";
+  } finally {
+    loadEl.style.display = "none";
+    btn.disabled = false;
+  }
+}
+
+function showDashboard(rows, phone) {
+  document.getElementById("login-section").style.display    = "none";
+  document.getElementById("dashboard-section").style.display = "block";
+
+  const name = rows[0]["الاسم"] || "—";
+  document.getElementById("dash-name").textContent  = name;
+  document.getElementById("dash-phone").textContent = phone;
+
+  // Stats
+  const presentRows = rows.filter(r => r["حضر"] === "1" || r["حضر"] === "نعم" || r["حضر"] === "حاضر" || r["حضر"] === "✓" || r["حضر"].toLowerCase() === "yes" || r["حضر"] === "true");
+  const absentRows  = rows.filter(r => !presentRows.includes(r));
+  const gradeRows   = rows.filter(r => r["الدرجة"] !== "" && r["الدرجة"] !== undefined);
+  const grades      = gradeRows.map(r => parseFloat(r["الدرجة"])).filter(n => !isNaN(n));
+  const avg         = grades.length ? (grades.reduce((a,b)=>a+b,0)/grades.length).toFixed(1) : "—";
+
+  document.getElementById("stat-present").textContent = presentRows.length;
+  document.getElementById("stat-absent").textContent  = absentRows.length;
+  document.getElementById("stat-avg").textContent     = avg;
+
+  // Attendance table
+  const tAttend = document.getElementById("tbody-attend");
+  tAttend.innerHTML = rows.map(r => {
+    const isPresent = presentRows.includes(r);
+    return `<tr>
+      <td>${r["اليوم"] || "—"}</td>
+      <td>${r["الشهر"] || "—"}</td>
+      <td><span class="badge ${isPresent ? 'badge-present' : 'badge-absent'}">${isPresent ? 'حاضر' : 'غائب'}</span></td>
+    </tr>`;
+  }).join("");
+
+  // Grades table
+  const tGrades = document.getElementById("tbody-grades");
+  if (gradeRows.length === 0) {
+    tGrades.innerHTML = `<tr><td colspan="3" class="empty">لا توجد درجات مسجّلة</td></tr>`;
+  } else {
+    tGrades.innerHTML = gradeRows.map(r => `<tr>
+      <td>${r["اليوم"] || "—"}</td>
+      <td>${r["الشهر"] || "—"}</td>
+      <td><strong>${r["الدرجة"]}</strong></td>
+    </tr>`).join("");
+  }
+}
+
+function switchTab(tab) {
+  document.getElementById("panel-attend").style.display = tab === "attend" ? "block" : "none";
+  document.getElementById("panel-grades").style.display = tab === "grades" ? "block" : "none";
+  document.getElementById("tab-attend").className = "tab" + (tab === "attend" ? " active" : "");
+  document.getElementById("tab-grades").className = "tab" + (tab === "grades" ? " active" : "");
+}
+
+function doLogout() {
+  studentRows = [];
+  document.getElementById("phone").value    = "";
+  document.getElementById("password").value = "";
+  document.getElementById("dashboard-section").style.display = "none";
+  document.getElementById("login-section").style.display     = "block";
+}
+
+document.getElementById("password").addEventListener("keydown", e => {
+  if (e.key === "Enter") doLogin();
+});
+document.getElementById("phone").addEventListener("keydown", e => {
+  if (e.key === "Enter") doLogin();
+});
+</script>
+</body>
+</html>
